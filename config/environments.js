@@ -6,6 +6,7 @@ dotenv.config();
 const envSchema = Joi.object({
   PORT: Joi.number().default(5000),
   MONGO_URI: Joi.string().required(),
+  JWT_SECRET: Joi.string().required(),
 })
   .unknown()
   .required();
@@ -18,3 +19,4 @@ if (error) {
 
 export const PORT = value.PORT;
 export const MONGO_URI = value.MONGO_URI;
+export const JWT_SECRET = value.JWT_SECRET;
