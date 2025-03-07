@@ -50,13 +50,35 @@ export const getTickets = async (req, res, next) => {
   try {
     if (req.user.role === "Admin") {
       const tickets = await Ticket.find();
-      return res.status(200).json({ tickets });
+      const formattedTickets = tickets.map((ticket) => ({
+        id: ticket._id,
+        title: ticket.title,
+        description: ticket.description,
+        status: ticket.status,
+      }));
+      return res.status(200).json({ tickets: formattedTickets });
     }
 
     const tickets = await Ticket.find({ user: req.user._id });
     return res.status(200).json({ tickets });
   } catch (error) {
     console.error("Error fetching tickets:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getTicket = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    const ticket = await Ticket.findById(id);
+    return res.status(200).json({
+      id: ticket._id,
+      title: ticket.title,
+      description: ticket.description,
+      status: ticket.status,
+    });
+  } catch (error) {
     res.status(500).json({ message: "Internal server error" });
   }
 };

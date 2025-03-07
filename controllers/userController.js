@@ -42,7 +42,15 @@ export const loginController = async (req, res, next) => {
     const payload = { id: user._id };
     const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
 
-    return res.status(200).json({ userId: user._id, token: `Bearer ${token}` });
+    return res.status(200).json({
+      token: `Bearer ${token}`,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Internal server error" });
